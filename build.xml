@@ -12,7 +12,7 @@
         <pathelement location="${build.test.dir}"/>
         <fileset dir="${lib.dir}" includes="*.jar"/>
     </path>
-</project>
+
 
 
 <target name="prepare">
@@ -25,3 +25,5 @@
 	<mkdir dir="${system.test.dir}"/>
 	<mkdir dir="${lib.dir}"/>
 </target>
+
+</project>
