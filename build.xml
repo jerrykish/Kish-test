@@ -1,12 +1,14 @@
 <project name="SimpleProject">
+
 	<property name="build.dir" value="build"/>
-	<property name="build.prod.dir" value="${build.dir}/prod">
-	<property name="build.test.dir" value="${build.dir}/test">
+	<property name="build.prod.dir" value="${build.dir}/prod"/>
+	<property name="build.test.dir" value="${build.dir}/test"/>
 	<property name="build.jar.dir" value="${build.dir}/jar"/>
     <property name="src.dir" value="src"/>
     <property name="unit.test.dir" value="unit-test"/>
     <property name="system.test.dir" value="system-test"/>
     <property name="lib.dir" value="lib"/>
+	
     <path id="classpath">
         <pathelement location="${build.prod.dir}"/>
         <pathelement location="${build.test.dir}"/>
@@ -14,16 +16,44 @@
     </path>
 
 
+	<target name="prepare">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.prod.dir}"/>
+		<mkdir dir="${build.test.dir}"/>
+		<mkdir dir="${build.jar.dir}"/>
+		<mkdir dir="${src.dir}"/>
+		<mkdir dir="${unit.test.dir}"/>
+		<mkdir dir="${system.test.dir}"/>
+		<mkdir dir="${lib.dir}"/>
+	</target>
+	
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.dir}"
+          destdir="${build.prod.dir}" classpathref="classpath"/>
+	</target>
 
-<target name="prepare">
-    <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.prod.dir}"/>
-    <mkdir dir="${build.test.dir}"/>
-	<mkdir dir="${build.jar.dir}"/>
-	<mkdir dir="${src.dir}"/>
-	<mkdir dir="${unit.test.dir}"/>
-	<mkdir dir="${system.test.dir}"/>
-	<mkdir dir="${lib.dir}"/>
-</target>
+	<target name="run" depends="jar">
+		<java jar="${build.jar.dir}/Encrypt.jar" fork="true"/>
+	</target>
+	
+	
+	<target name="clean" description="clean up" >
+		<delete dir="${build}"/>
+	</target>
+	
+	
+	
+	<target name="run-unit-tests" depends="compile,compile-tests">
+		<junit printsummary="yes">
+			<classpath refid="classpath"/>
+			<formatter type="brief" usefile="false"/>
+			<batchtest fork="yes" todir="${unit.test.report.dir}">
+				<fileset dir="unit-test/" includes="**/*Test.java"/>
+			</batchtest>
+		</junit>
+	</target>
+	
+	
+	
 
 </project>
